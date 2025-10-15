@@ -18,7 +18,7 @@ EMBEDDING_MODEL = GoogleGenerativeAIEmbeddings(
     google_api_key=GEMINI_API_KEY
 ) 
 LLM = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash", 
+    model="gemini-2.5-pro", 
     temperature=0.1,
     google_api_key=GEMINI_API_KEY
 )
