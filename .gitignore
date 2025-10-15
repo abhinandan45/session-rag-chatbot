@@ -1,0 +1,17 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+
+
+data/vector_stores/
+
+.env
+*.key
+*.pem
+
+data/uploaded_docs/
+
+.streamlit/

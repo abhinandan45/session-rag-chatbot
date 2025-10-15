@@ -1,0 +1,17 @@
+# LLM and RAG Frameworks
+google-genai
+langchain
+langchain-community
+pydantic
+chromadb
+sentence-transformers
+pypdf
+
+pdfminer.six 
+streamlit
+
+streamlit-mic-recorder 
+gTTS 
+langchain-google-genai
+chromadb
+pdfminer.six
