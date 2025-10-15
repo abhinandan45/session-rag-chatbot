@@ -34,7 +34,8 @@ def start_new_session():
     """Resets the state to start a new isolated chat."""
     # Purana data vector store mein save rahega, bas hum naya session shuru kar rahe hain
     st.session_state.session_id = str(uuid.uuid4())
-    st.session_state.rag_system = RAGSystem(st.session_id) # Naye ID ke saath naya object
+    # FIX: st.session_id ki jagah st.session_state.session_id use kiya
+    st.session_state.rag_system = RAGSystem(st.session_state.session_id) # Naye ID ke saath naya object
     st.session_state.messages = []
     st.session_state.uploaded_file_name = None
     st.success("🎉 New Chat Session started! Upload a document.")
@@ -141,18 +142,3 @@ else:
 # --- Running the App ---
 # Terminal mein yeh command run karein:
 # streamlit run app.py
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
