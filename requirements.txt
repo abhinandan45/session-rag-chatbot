@@ -1,18 +1,23 @@
 # LLM and RAG Frameworks
-google-genai
+streamlit
+streamlit-mic-recorder
+gTTS
+
+# LangChain ecosystem (latest structure)
 langchain
+langchain-core
 langchain-community
-pydantic
+langchain-text-splitters
+langchain-google-genai
+
+# Vector store & embeddings
 chromadb
 sentence-transformers
+
+# PDF loaders & parsers
 pypdf
-
-pdfminer.six 
-streamlit
-
-streamlit-mic-recorder 
-gTTS 
-langchain-google-genai
-chromadb
 pdfminer.six
-langchain-text-splitters
+
+# Environment & validation
+pydantic
+python-dotenv
