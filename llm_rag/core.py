@@ -2,24 +2,21 @@ import os
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter  # <--- FIX: Corrected import location
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
-from langchain_community.chains import RetrievalQA
+from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 
 load_dotenv()
-# Note: GEMINI_API_KEY ko os.getenv() se fetch karna surakshit hai
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY not found in .env file.")
 
 # --- 1. SETUP (Models are global) ---
-# Embeddings: Documents ko vectors mein badalne ke liye
 EMBEDDING_MODEL = GoogleGenerativeAIEmbeddings(
     model="text-embedding-004", 
     google_api_key=GEMINI_API_KEY
 ) 
-# LLM: User ke sawaalon ka jawab dene ke liye
 LLM = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash", 
     temperature=0.1,
@@ -31,7 +28,6 @@ class RAGSystem:
     # Ab __init__ mein session_id lenge
     def __init__(self, session_name: str):
         self.session_name = session_name
-        # Har session ke liye alag database path
         self.db_path = os.path.join(BASE_DB_PATH, self.session_name)
         self.vector_store = None
         
@@ -84,19 +80,17 @@ class RAGSystem:
         self.qa_chain = RetrievalQA.from_chain_type(
             llm=LLM,
             chain_type="stuff",
-            # k=3: matlab sabse zyada relevant 3 chunks hi retrieve honge
             retriever=self.vector_store.as_retriever(search_kwargs={"k": 3}),
             chain_type_kwargs={"prompt": self.PROMPT},
             return_source_documents=False
         )
         
     def ingest_document(self, file_path: str):
-        """PDF file ko load karke chunks mein divide karta hai aur vector store mein dalta hai."""
+        # ... Ingestion logic yahan same rahega, bas self.vector_store use hoga ...
         print(f"Loading document: {file_path} into session {self.session_name}...")
         loader = PyPDFLoader(file_path)
         documents = loader.load()
         
-        # Document ko chunks mein todne ke liye
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,
             chunk_overlap=200,
@@ -106,11 +100,11 @@ class RAGSystem:
 
         # Vector Store ko update karo
         self.vector_store.add_documents(texts)
-        self.vector_store.persist() # Disk par save karo
+        self.vector_store.persist()
         print(f"Document successfully added and DB persisted for session: {self.session_name}.")
         
     def query(self, question: str) -> str:
-        """Vector store se relevant context nikalta hai aur LLM se jawab generate karwata hai."""
+        # ... Query logic same rahega ...
         if not self.vector_store:
             return "Error: Vector store is not initialized."
         
@@ -118,3 +112,4 @@ class RAGSystem:
         return result['result']
 
 # Ab hum global 'rag_system' object nahi banayenge! Uski jagah app.py mein banayenge.
+# Yeh line hata do: rag_system = RAGSystem()
